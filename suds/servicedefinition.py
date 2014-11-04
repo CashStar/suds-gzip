@@ -123,9 +123,13 @@ class ServiceDefinition:
                 namespaces.append(ns[1])
         i = 0
         namespaces.sort()
+        known_uris = {v:k for k,v in self.wsdl.root.nsprefixes.iteritems()}
         for u in namespaces:
-            p = self.nextprefix()
-            ns = (p, u)
+            if u in known_uris:
+                ns = (known_uris[u], u)
+            else:
+                p = self.nextprefix()
+                ns = (p, u)
             self.prefixes.append(ns)
             
     def paramtypes(self):
